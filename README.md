@@ -68,71 +68,37 @@ EBS Storage
 
 
 
-\### 1. EC2 Instance Setup
+## Implementation Steps & Proofs
+
+### 1. EC2 Instance Setup
+- Created an Ubuntu EC2 instance
+- Configured SSH access with Key Pair
+- Connected to the server using SSH
+
+### 2. Security Configuration (Security Groups & IAM)
+Configured Security Group rules to allow HTTP (Port 80) and restricted SSH (Port 22). Attached an IAM Role (`EC2-S3-ReadOnly-Role`) for secure permission management without hardcoding Access Keys.
+
+![Security Configuration](screenshots/AWS%20IAM%20Role%20And%20Port%20Conf.jpeg)
+
+### 3. Storage Configuration (EBS)
+Created and attached an additional 8GB gp3 EBS volume. Formatted with `ext4` and mounted to `/data`.
+
+```bash
+# Format the volume and mount it to the directory
+sudo mkfs.ext4 /dev/nvme1n1
+sudo mkdir /data
+sudo mount /dev/nvme1n1 /data
+
+# Install and start Apache HTTP Server
+sudo apt update
+sudo apt install apache2 -y
+sudo systemctl enable apache2
+sudo systemctl start apache2
+
+# Test IAM Role Permissions via AWS CLI
+aws s3 ls
 
 
-
-\- Created an Ubuntu EC2 instance
-
-\- Configured SSH access with Key Pair
-
-\- Connected to the server using SSH
-
-
-
-
-
-\### 2. Apache Web Server Deployment
-
-
-
-\- Installed Apache Web Server
-
-\- Hosted a static webpage on the EC2 instance
-
-
-
-
-
-\### 3. Security Configuration
-
-
-
-Configured Security Group rules:
-
-
-
-\- SSH (Port 22) for remote access
-
-\- HTTP (Port 80) for web traffic
-
-
-
-
-
-\### 4. IAM Role Configuration
-
-
-
-\- Created an IAM Role
-
-\- Attached the role to the EC2 instance for secure permission management
-
-
-
-
-
-\### 5. Storage Configuration
-
-
-
-\- Created and attached an additional EBS volume
-
-
-
-
-
-\## Project Structure
 
 
 
